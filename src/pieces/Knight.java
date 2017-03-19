@@ -1,20 +1,28 @@
-package pieces;
+package Pieces;
 
-/**
- * Created by Jeff on 1/27/2017.
- */
-public class Knight extends Piece {
+import java.awt.Point;
 
-    public Knight(int x, int y, boolean isBlack) {
-        super(x, y, isBlack);
-    }
+import BoardComponents.Board;
 
-    @Override
-    public boolean isValidMove(int toX, int toY) {
-        if(!super.isValidMove(toX, toY))
-            return false;
-        if(Math.sqrt(Math.pow(toX-getX(), 2) + Math.pow(toY-getY(), 2)) == Math.sqrt(5))
-            return true;
-        return false;
-    }
+public class Knight extends Piece{
+
+	public Knight(int x, int y, boolean isBlack) {
+		super(x, y, isBlack, "knight.png");
+	}
+	
+	@Override
+	public boolean move(Point newPosition){
+		if(Board.pieces[newPosition.x][newPosition.y] == null || Board.pieces[newPosition.x][newPosition.y].isBlack != isBlack){
+			if( (newPosition.x + 2 == position.x || newPosition.x - 2 == position.x) &&
+				(newPosition.y + 1 == position.y || newPosition.y - 1 == position.y) ){
+				finalizeMove(newPosition);
+				return true;
+			}else if( (newPosition.y + 2 == position.y || newPosition.y - 2 == position.y) &&
+					(newPosition.x + 1 == position.x || newPosition.x - 1 == position.x) ){
+				finalizeMove(newPosition);
+				return true;
+			}
+		}	
+		return false;
+	}
 }

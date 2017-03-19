@@ -1,22 +1,22 @@
-package pieces;
+package Pieces;
 
-/**
- * Created by Jeff on 1/27/2017.
- */
+import java.awt.Point;
+
+import BoardComponents.Board;
+
 public class King extends Piece{
+	public King(int x, int y, boolean isBlack){
+		super(x,y,isBlack, "king.png");
+	}
 
-    private boolean inCheck = false;
-
-    public King(int x, int y, boolean isBlack) {
-        super(x, y, isBlack);
-    }
-
-    @Override
-    public boolean isValidMove(int toX, int toY) {
-        if(!super.isValidMove(toX, toY))
-            return false;
-        if(Math.sqrt(Math.pow(toX - getX(), 2) + Math.pow(toY - getY(), 2)) <= Math.sqrt(2))
-            return true;
-        return false;
-    }
+	@Override
+	public boolean move(Point newPosition) {
+		if(Math.abs(newPosition.x - position.x) <= 1 && Math.abs(newPosition.y - position.y) <= 1){
+			if(Board.pieces[newPosition.x][newPosition.y] == null || Board.pieces[newPosition.x][newPosition.y].isBlack != isBlack){
+				finalizeMove(newPosition);
+				return true;
+			}
+		}
+		return false;
+	}
 }

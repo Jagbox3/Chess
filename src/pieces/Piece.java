@@ -1,52 +1,39 @@
-package pieces;
+package Pieces;
 
-/**
- * Created by Jeff on 1/27/2017.
- */
+import java.awt.Point;
+import BoardComponents.*;
+
 public abstract class Piece {
 
-    private boolean taken = false, isBlack;
-    private int x, y;
+	public Point position;
+	public String pieceName;
+	public boolean isBlack;
+	public Piece(int x, int y,boolean isBlack, String name){
+		position = new Point(x,y);
+		this.isBlack = isBlack;
+		
+		if(isBlack)
+			pieceName = "black" + name;
+		else
+			pieceName = "white" + name;
+	}
+	
+	public abstract boolean move(Point newPosition);
+	
+	//returns true if it can make the move	
+	void finalizeMove(Point newPosition){		
+		if(Board.pieces[newPosition.x][newPosition.y] != null && Board.pieces[newPosition.x][newPosition.y].pieceName.equals("blackking.png"))
+			Board.gameOver = "black"; 
+		else if(Board.pieces[newPosition.x][newPosition.y] != null && Board.pieces[newPosition.x][newPosition.y].pieceName.equals("whiteking.png"))
+			Board.gameOver = "white";
+		
+		Board.pieces[position.x][position.y] = null;
+		Board.squares[position.x][position.y].occupyingPiece = null;
+		Board.pieces[newPosition.x][newPosition.y] = this;
+		Board.squares[newPosition.x][newPosition.y].occupyingPiece = this;
 
-    public Piece(int x, int y, boolean isBlack){
-        this.x = x;
-        this.y = y;
-        this.isBlack = isBlack;
-    }
-
-    public boolean isTaken(){
-        return taken;
-    }
-
-    public int getX(){
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setTaken(boolean taken) {
-        this.taken = taken;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public boolean isValidMove(int toX, int toY){
-        if(toX == x && toY == y){
-            //can't move to the same place
-            return false;
-        }
-        if(toX > 7 || toX < 0 || toY > 7 || toY < 0){
-            //can't move off the game
-            return false;
-        }
-        return true;
-    }
+		position = newPosition;
+	}
+	
+	
 }
